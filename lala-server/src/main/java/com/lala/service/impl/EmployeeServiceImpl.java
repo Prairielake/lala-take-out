@@ -1,22 +1,30 @@
 package com.lala.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.lala.constant.MessageConstant;
 import com.lala.constant.PasswordConstant;
 import com.lala.constant.StatusConstant;
 import com.lala.context.BaseContext;
 import com.lala.dto.EmployeeDTO;
 import com.lala.dto.EmployeeLoginDTO;
+import com.lala.dto.EmployeePageQueryDTO;
 import com.lala.entity.Employee;
 import com.lala.exception.AccountLockedException;
 import com.lala.exception.AccountNotFoundException;
 import com.lala.exception.PasswordErrorException;
 import com.lala.mapper.EmployeeMapper;
+import com.lala.result.PageResult;
 import com.lala.service.EmployeeService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
+
+import java.util.List;
 
 @Service
 public class EmployeeServiceImpl extends ServiceImpl<EmployeeMapper, Employee> implements EmployeeService{
@@ -72,6 +80,19 @@ public class EmployeeServiceImpl extends ServiceImpl<EmployeeMapper, Employee> i
         employee.setCreateUser(BaseContext.getCurrentId());
         employee.setUpdateUser(BaseContext.getCurrentId());
         save(employee);
+    }
+
+    @Override
+    public PageResult pageQuery(EmployeePageQueryDTO employeePageQueryDTO) {
+        PageHelper.startPage(employeePageQueryDTO.getPage(), employeePageQueryDTO.getPageSize());
+        LambdaQueryWrapper<Employee> queryWrapper = new LambdaQueryWrapper<Employee>()
+                .like(Employee::getName, employeePageQueryDTO.getName())
+                .orderByDesc(Employee::getCreateTime);
+        List<Employee> employees = employeeMapper.selectList(queryWrapper);
+        PageInfo<Employee> employeePageInfo = new PageInfo<>(employees);
+        long total = employeePageInfo.getTotal();
+        List<Employee> records = employeePageInfo.getList();
+        return new PageResult(total, records);
     }
 
 }

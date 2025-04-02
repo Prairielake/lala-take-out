@@ -3,7 +3,9 @@ package com.lala.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.lala.dto.EmployeeDTO;
 import com.lala.dto.EmployeeLoginDTO;
+import com.lala.dto.EmployeePageQueryDTO;
 import com.lala.entity.Employee;
+import com.lala.result.PageResult;
 import com.lala.result.Result;
 
 public interface EmployeeService extends IService<Employee> {
@@ -16,4 +18,6 @@ public interface EmployeeService extends IService<Employee> {
     Employee login(EmployeeLoginDTO employeeLoginDTO);
 
     void save(EmployeeDTO employeeDTO);
+
+    PageResult pageQuery(EmployeePageQueryDTO employeePageQueryDTO);
 }
