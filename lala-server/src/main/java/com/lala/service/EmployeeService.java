@@ -8,6 +8,8 @@ import com.lala.entity.Employee;
 import com.lala.result.PageResult;
 import com.lala.result.Result;
 
+import java.math.BigInteger;
+
 public interface EmployeeService extends IService<Employee> {
 
     /**
@@ -20,4 +22,10 @@ public interface EmployeeService extends IService<Employee> {
     void save(EmployeeDTO employeeDTO);
 
     PageResult pageQuery(EmployeePageQueryDTO employeePageQueryDTO);
+
+    void startOrStop(Integer status, Long id);
+
+    Employee getById(Long id);
+
+    void updateEmployeeData(EmployeeDTO employeeDTO);
 }

@@ -24,6 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
+import java.math.BigInteger;
 import java.util.List;
 
 @Service
@@ -79,12 +80,20 @@ public class EmployeeServiceImpl extends ServiceImpl<EmployeeMapper, Employee> i
         employee.setPassword(DigestUtils.md5DigestAsHex(PasswordConstant.DEFAULT_PASSWORD.getBytes()));
         employee.setCreateUser(BaseContext.getCurrentId());
         employee.setUpdateUser(BaseContext.getCurrentId());
+//        employeeMapper.insert(employee);
         save(employee);
     }
 
     @Override
     public PageResult pageQuery(EmployeePageQueryDTO employeePageQueryDTO) {
         PageHelper.startPage(employeePageQueryDTO.getPage(), employeePageQueryDTO.getPageSize());
+        if (employeePageQueryDTO.getName() == null) {
+            List<Employee> employees = this.list();
+            PageInfo<Employee> employeePageInfo = new PageInfo<>(employees);
+            long total = employeePageInfo.getTotal();
+            List<Employee> records = employeePageInfo.getList();
+            return new PageResult(total, records);
+        }
         LambdaQueryWrapper<Employee> queryWrapper = new LambdaQueryWrapper<Employee>()
                 .like(Employee::getName, employeePageQueryDTO.getName())
                 .orderByDesc(Employee::getCreateTime);
@@ -93,6 +102,31 @@ public class EmployeeServiceImpl extends ServiceImpl<EmployeeMapper, Employee> i
         long total = employeePageInfo.getTotal();
         List<Employee> records = employeePageInfo.getList();
         return new PageResult(total, records);
+    }
+
+    @Override
+    public void startOrStop(Integer status, Long id) {
+        Employee employee = Employee.builder()
+                .status(status)
+                .id(id)
+                .build();
+        employeeMapper.updateById(employee);
+
+    }
+
+    @Override
+    public Employee getById(Long id) {
+        Employee employee = employeeMapper.selectById(id);
+        employee.setPassword("******");
+        return employee;
+    }
+
+    @Override
+    public void updateEmployeeData(EmployeeDTO employeeDTO) {
+        Employee employee = new Employee();
+        BeanUtils.copyProperties(employeeDTO, employee);
+        employee.setUpdateUser(BaseContext.getCurrentId());
+        employeeMapper.updateById(employee);
     }
 
 }
