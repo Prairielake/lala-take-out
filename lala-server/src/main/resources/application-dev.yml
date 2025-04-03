@@ -1,8 +1,13 @@
-sky:
+lala:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     host: localhost
     port: 3306
-    database: sky_take_out
+    database: lala-take-out
     username: root
-    password: root
+    password: Lfy13615818578
+  alioss:
+    endpoint: oss-cn-hangzhou.aliyuncs.com
+    access-key-id: LTAI5tK2N9of9jgEeQR6i8CJ
+    access-key-secret: FlomBNqJfMyMiX9go4acja47HgbISV
+    bucket-name: lala-take-out
