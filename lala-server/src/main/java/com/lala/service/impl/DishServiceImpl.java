@@ -23,7 +23,9 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -75,6 +77,7 @@ public class DishServiceImpl extends ServiceImpl<DishMapper, Dish> implements Di
     }
 
     @Override
+    @Transactional
     public void deleteBatch(List<Long> ids) {
         for (Long id : ids) {
             Dish dish = dishMapper.selectById(id);
@@ -88,7 +91,7 @@ public class DishServiceImpl extends ServiceImpl<DishMapper, Dish> implements Di
                 throw new DeletionNotAllowedException(MessageConstant.DISH_BE_RELATED_BY_SETMEAL);
             }
             dishMapper.deleteById(id);
-            dishFlavorMapper.deleteById(id);
+            dishFlavorMapper.delete(new LambdaQueryWrapper<DishFlavor>().eq(DishFlavor::getDishId, id));
         }
     }
 
@@ -117,5 +120,16 @@ public class DishServiceImpl extends ServiceImpl<DishMapper, Dish> implements Di
         Dish dish = new Dish();
         BeanUtils.copyProperties(dishDTO, dish);
         dishMapper.updateById(dish);
+    }
+
+    @Override
+    public List<DishVO> listByCategoryId(String categoryId) {
+        List<Dish> dishes = dishMapper.selectList(new LambdaQueryWrapper<Dish>().eq(Dish::getCategoryId, categoryId));
+        List<DishVO> dishVOList = new ArrayList<>();
+        for (Dish dish : dishes) {
+            DishVO dishVO = BeanUtil.copyProperties(dish, DishVO.class);
+            dishVOList.add(dishVO);
+        }
+        return dishVOList;
     }
 }

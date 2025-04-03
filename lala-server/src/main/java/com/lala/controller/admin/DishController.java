@@ -19,7 +19,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/admin/dish")
-@Api(tags = "菜品相关接口")
+@Api(tags = "菜品管理接口")
 @Slf4j
 public class DishController {
 
@@ -105,6 +105,17 @@ public class DishController {
         log.info("修改菜品：{}", dishDTO);
         dishService.updateWithFlavor(dishDTO);
         return Result.success();
+    }
+
+    /*
+    * 根据分类id查询菜品
+    * */
+    @GetMapping("/list")
+    @ApiOperation("根据分类id查询菜品")
+    public Result<List<DishVO>> list(String categoryId){
+        log.info("根据分类id查询菜品：{}", categoryId);
+        List<DishVO> dishVO = dishService.listByCategoryId(categoryId);
+        return Result.success(dishVO);
     }
 
 }
