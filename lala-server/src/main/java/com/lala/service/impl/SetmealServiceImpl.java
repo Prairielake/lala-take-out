@@ -19,6 +19,7 @@ import com.lala.mapper.SetmealDishMapper;
 import com.lala.mapper.SetmealMapper;
 import com.lala.result.PageResult;
 import com.lala.service.SetmealService;
+import com.lala.vo.DishItemVO;
 import com.lala.vo.SetmealVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -117,6 +118,18 @@ public class SetmealServiceImpl extends ServiceImpl<SetmealMapper, Setmeal> impl
             setmealMapper.deleteById(id);
             setmealDishMapper.delete(lambdaQueryWrapper);
         }
+    }
+
+    @Override
+    public List<Setmeal> listByCategoryId(Setmeal setmeal) {
+        LambdaQueryWrapper<Setmeal> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.eq(Setmeal::getCategoryId, setmeal.getCategoryId());
+        return setmealMapper.selectList(lambdaQueryWrapper);
+    }
+
+    @Override
+    public List<DishItemVO> getDishItemById(Long id) {
+        return setmealMapper.getDishItemBySetmealId(id);
     }
 
 

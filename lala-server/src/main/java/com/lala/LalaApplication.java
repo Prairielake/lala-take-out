@@ -10,9 +10,9 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableTransactionManagement //开启注解方式的事务管理
 @Slf4j
 @MapperScan("com.lala.mapper")
-public class SkyApplication {
+public class LalaApplication {
     public static void main(String[] args) {
-        SpringApplication.run(SkyApplication.class, args);
+        SpringApplication.run(LalaApplication.class, args);
         log.info("server started");
     }
 }

@@ -132,4 +132,32 @@ public class DishServiceImpl extends ServiceImpl<DishMapper, Dish> implements Di
         }
         return dishVOList;
     }
+
+    /**
+     * 条件查询菜品和口味
+     * @param dish
+     * @return
+     */
+    public List<DishVO> listWithFlavor(Dish dish) {
+        LambdaQueryWrapper<Dish> lambdaQueryWrapper = new LambdaQueryWrapper();
+        lambdaQueryWrapper.eq(Dish::getCategoryId, dish.getCategoryId());
+        List<Dish> dishList = dishMapper.selectList(lambdaQueryWrapper);
+
+        List<DishVO> dishVOList = new ArrayList<>();
+
+        for (Dish d : dishList) {
+            DishVO dishVO = new DishVO();
+            BeanUtils.copyProperties(d,dishVO);
+
+            //根据菜品id查询对应的口味
+            LambdaQueryWrapper<DishFlavor> lambdaQueryWrapper1 = new LambdaQueryWrapper<>();
+            lambdaQueryWrapper1.eq(DishFlavor::getDishId, d.getId());
+            List<DishFlavor> flavors = dishFlavorMapper.selectList(lambdaQueryWrapper1);
+
+            dishVO.setFlavors(flavors);
+            dishVOList.add(dishVO);
+        }
+
+        return dishVOList;
+    }
 }

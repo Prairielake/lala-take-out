@@ -15,3 +15,6 @@ lala:
     host: localhost
     port: 6379
     database: 3
+  wechat:
+    appid: wxffb3637a228223b8
+    secret: 84311df9199ecacdf4f12d27b6b9522d

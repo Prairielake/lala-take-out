@@ -23,4 +23,6 @@ public interface DishService extends IService<Dish> {
     void updateWithFlavor(DishDTO dishDTO);
 
     List<DishVO> listByCategoryId(String categoryId);
+
+    List<DishVO> listWithFlavor(Dish dish);
 }
