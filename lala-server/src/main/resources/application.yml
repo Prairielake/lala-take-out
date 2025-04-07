@@ -12,6 +12,10 @@ spring:
       url: jdbc:mysql://${lala.datasource.host}:${lala.datasource.port}/${lala.datasource.database}?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
       username: ${lala.datasource.username}
       password: ${lala.datasource.password}
+  redis:
+    host: ${lala.redis.host}
+    port: ${lala.redis.port}
+    database: ${lala.redis.database}
 
 #mybatis:
 #  #mapper配置文件
@@ -49,3 +53,4 @@ mybatis-plus:
       id-type: auto
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+

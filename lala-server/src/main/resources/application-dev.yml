@@ -11,3 +11,7 @@ lala:
     access-key-id: LTAI5tK2N9of9jgEeQR6i8CJ
     access-key-secret: FlomBNqJfMyMiX9go4acja47HgbISV
     bucket-name: lala-take-out
+  redis:
+    host: localhost
+    port: 6379
+    database: 3
